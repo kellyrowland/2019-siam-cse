@@ -104,6 +104,7 @@
 \usepackage{multirow}
 \usepackage[super]{nth}
 \usepackage{color, colortbl}
+\usepackage{hyperref}
 
 \definecolor{LightRed}{rgb}{1,.8,.8}
 
@@ -137,7 +138,7 @@
 	\titlepage
 \end{frame}
 
-\begin{frame}{Nuclear Engineering}
+\begin{frame}{Radiation Transport}
 %
 \pause
 %
@@ -151,7 +152,6 @@
 \center
 \includegraphics[width=\textwidth,natwidth=1024,natheight=648]{img/nuclear_dry_storage.jpg}
 \end{column}
-\pause
 \begin{column}{0.5\textwidth}
 \center
 \includegraphics[width=\textwidth,natwidth=2369,natheight=1433]{img/pet-spect.jpg}
@@ -355,13 +355,13 @@ k &= 1,2,\ldots,K.
 \begin{frame}{Lagrange Discrete Ordinates (LDO) Equations \nocite{ahrens}}
 %
 \vspace{-2em}
-%
+% use energy group notation to be consistent with discrete ordinates eqs.
 \begin{align*}
-\bo_n&\cdot\nabla\psi_{n}(\vecr,E) + 
-\Sigma_{t}(\vecr,E)\psi_{n}(\vecr,E) = \\
-&\int_0^\infty\sum_{m=1}^{N}\sum_{n'=1}^{N}\langle L_{n'},L_{m}\rangle
-\Sigma_{s,L}(\vecr,E'\rightarrow E,\bo_{m}\cdot\bo_n)\psi_{n'}(\vecr,E')dE'
-+ Q_{n}(\vecr,E)
+\bo_n\cdot\nabla\psi_{n}^g(\vecr) + 
+&\Sigma_{t}^g(\vecr)\psi_{n}^g(\vecr) = \\
+&\sum_{g'=0}^{G-1}\sum_{m=1}^{N}\sum_{n'=1}^{N}\langle L_{n'},L_{m}\rangle
+\Sigma_{s,L}^{g'\sa g}(\vecr,\bo_{m}\cdot\bo_n)\psi_{n'}^{g'}(\vecr)
++ Q_{n}^g(\vecr)
 \end{align*}
 %
 \pause
@@ -392,13 +392,22 @@ evaluate their solutions relative to standard quadrature sets.
 
 \begin{frame}{Software\nocite{denovo}}
 %
+\begin{columns}
+\begin{column}{0.5\textwidth}
 \begin{itemize}
 \item{Exnihilo}
 \begin{itemize}
-\item{Framework including deterministic transport solvers}
-\item{Developed at ORNL}
+\item{Framework including Denovo deterministic transport solver}
+\item{Developed at Oak Ridge National Laboratory}
+\item{\cpp, Python}
 \end{itemize}
 \end{itemize}
+\end{column}
+%
+\begin{column}{0.5\textwidth}
+\includegraphics[width=\textwidth,natwidth=932,natheight=754]{img/exnihilo.png}
+\end{column}
+\end{columns}
 %
 \end{frame}
 
@@ -514,12 +523,15 @@ thereof.
 %
 \end{frame}
 
-\begin{frame}{Questions?}
-%
-\center
-\includegraphics[width=0.8\textwidth,natwidth=599,natheight=448]{img/hax.png}
-%
-%
+\begin{frame}
+  \huge{
+  \begin{center}
+  Questions?
+
+  \vspace{\baselineskip}
+  \url{https://tiny.cc/klr-nse18}
+  \end{center}
+  }
 \end{frame}
 
 \backupbegin

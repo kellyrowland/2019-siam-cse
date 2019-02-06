@@ -15,3 +15,4 @@
 *.tex.bak
 *.toc
 *.vrb
+.DS_Store
