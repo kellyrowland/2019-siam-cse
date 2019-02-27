@@ -129,7 +129,7 @@
 
 \title[Assessment of the LDO Equations for 3D Neutral Particle Transport]
 {Assessment of the Lagrange Discrete Ordinates Equations for Three-dimensional Neutral Particle Transport}
-\author[Kelly L. Rowland et al.]{Kelly L. Rowland, Cory D. Ahrens, Steven Hamilton, Rachel N. Slaybaugh}
+\author[Kelly L. Rowland et al.]{Kelly L. Rowland, Cory D. Ahrens, \\Steven Hamilton, Rachel N. Slaybaugh}
 % \institute{Department of Nuclear Engineering\\University of California, Berkeley}
 \date{SIAM CSE 2019}
 \begin{document}
@@ -240,7 +240,16 @@ Discretize energy and space:
 \end{tikzpicture}
 \end{scaletikzpicturetowidth}
 \end{center}
+\end{column}
+\begin{column}{0.3\textwidth}
+\begin{equation*}
+g = 0,1,\ldots,G-1,
+\end{equation*}
+\end{column}
+\end{columns}
 %
+\begin{columns}
+\begin{column}{0.7\textwidth}
 \begin{center}
 \begin{scaletikzpicturetowidth}{0.5\textwidth}
 \begin{tikzpicture}[scale=\tikzscale]
@@ -304,7 +313,6 @@ Discretize energy and space:
 \begin{column}{0.3\textwidth}
 \begin{align*}
 \begin{split}
-g &= 0,1,\ldots,G-1,\\
 i &= 1,2,\ldots,I,\\
 j &= 1,2,\ldots,J,\\
 k &= 1,2,\ldots,K.
@@ -313,14 +321,65 @@ k &= 1,2,\ldots,K.
 \end{column}
 \end{columns}
 %
-\pause
-\centering
-\vspace{1em}
-\textcolor{red}{What about discretizing angle?}
-%
 \end{frame}
 
-\begin{frame}{Discrete Ordinates Approximation}
+\begin{frame}{Angular Discretization}
+Let $\mu, \eta, \xi$ be the direction cosines of $\bo$ with respect to $x,y,z$\nocite{lm}.
+\begin{columns}
+\begin{column}{0.5\textwidth}
+\begin{figure}
+\begin{center}
+\begin{tikzpicture}
+\coordinate (origin) at (0,0,0);
+\coordinate (omega) at (1,2.5,4);
+\coordinate (xaxis) at (0,0,5);
+\coordinate (yaxis) at (1.5,0,0);
+\coordinate (diag) at (1,2.5,0);
+% axes
+\draw[thick,->] (xyz cs:x=0) -- (xyz cs:x=1.5) node[right] {\footnotesize{$x$}};
+\draw[thick,->] (xyz cs:y=0) -- (xyz cs:y=3) node[above] {\footnotesize{$y$}};
+\draw[thick,->] (xyz cs:z=0) -- (xyz cs:z=5) node[below] {\footnotesize{$z$}};
+% dashed box lines
+\draw[dashed] (xyz cs:z=4,y=2.5) -- (xyz cs:z=4,y=0) node[left] {\footnotesize{$\xi$}};
+\draw[dashed] (xyz cs:z=4,y=0) -- (xyz cs:z=4,x=1);
+\draw[dashed] (xyz cs:z=4,x=1) -- (xyz cs:z=4,y=2.5,x=1);
+\draw[dashed] (xyz cs:z=4,y=2.5,x=0) -- (xyz cs:z=4,y=2.5,x=1);
+
+\draw[dashed] (xyz cs:x=1,z=0) -- (xyz cs:x=1,z=4);
+\draw[dashed] (xyz cs:x=1,z=0,y=2.5) -- (xyz cs:x=1,z=0); 
+\draw[] (xyz cs:x=1.2,y=-0.1,z=0) -- (xyz cs:x=1.2,y=-0.1,z=0) node[above] {\footnotesize{$\mu$}};
+\draw[dashed] (xyz cs:x=1,z=0,y=2.5) -- (xyz cs:x=0,z=0,y=2.5) node[left] {\footnotesize{$\eta$}}; 
+\draw[dashed] (xyz cs:x=0,z=0,y=2.5) -- (xyz cs:z=4,y=2.5);
+\draw[dashed] (xyz cs:x=1,z=0,y=2.5) -- (xyz cs:z=4,y=2.5,x=1);
+
+\draw[thick,->] (xyz cs:x=0,y=0,z=0) -- (xyz cs:x=1,z=4,y=2.5);
+\draw[] (xyz cs:x=1,z=4,y=2.5) -- (xyz cs:x=1,z=4,y=2.5) node[above] {\footnotesize{$\bo$}};
+\draw[dashed] (xyz cs:x=1,z=0,y=2.5) -- (xyz cs:x=0,z=0);
+\draw[dashed] (xyz cs:z=4,y=0) -- (xyz cs:x=1,z=4,y=2.5);
+
+\pic [draw,<-,angle radius=0.25cm,angle eccentricity=1.4,"\footnotesize{$\theta$}"]{angle = omega--origin--xaxis};
+\pic [draw,->,angle radius=0.4cm,angle eccentricity=1.4,"\footnotesize{$\varphi$}"]{angle = yaxis--origin--diag};
+
+\end{tikzpicture}
+\end{center}
+\end{figure}
+\end{column}
+\begin{column}{0.5\textwidth}
+\begin{subequations}
+\begin{align*}
+&\xi = \cos\theta \\
+&\mu = \sqrt{1-\xi^2}\cos\varphi \\
+&\eta = \sqrt{1-\xi^2}\sin\varphi
+\end{align*}
+\end{subequations}
+\begin{equation*}
+\mu^2 + \eta^2 + \xi^2 = 1
+\end{equation*}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Discrete Ordinates (``S$_\mathbf{N}$'') Approximation}
 %
 \vspace{-2em}
 %
@@ -383,13 +442,6 @@ k &= 1,2,\ldots,K.
 %
 \end{frame}
 
-\begin{frame}{Research Question}
-%
-\underline{Idea}: Implement the LDO equations in a radiation transport framework and
-evaluate their solutions relative to standard quadrature sets.
-%
-\end{frame}
-
 \begin{frame}{Software\nocite{exum,denovo}}
 %
 \begin{columns}
@@ -397,7 +449,7 @@ evaluate their solutions relative to standard quadrature sets.
 \begin{itemize}
 \item{Exnihilo}
 \begin{itemize}
-\item{Framework including Denovo deterministic transport solver}
+\item{Framework including massively parallel 3D Denovo deterministic transport solver}
 \item{Developed at Oak Ridge National Laboratory}
 \item{\cpp, Python}
 \end{itemize}
@@ -409,6 +461,39 @@ evaluate their solutions relative to standard quadrature sets.
 \end{column}
 \end{columns}
 %
+\end{frame}
+
+\begin{frame}{Implementation of LDO Equations in Denovo}
+\begin{columns}[T]
+\begin{column}{0.485\textwidth}
+\center{\textbf{S$_\mathbf{N}$ Operator Form}}
+\begin{gather*}
+\ve{L}\vec{\psi} = \ve{MS}\vec{\phi} + \vec{Q}\\
+\vec{\phi} = \ve{D}\vec{\psi}\:, \quad \ve{D} = \ve{M}^\intercal\ve{W} \\
+\left(\ve{I} - \ve{DL^{-1} MS}\right)\vec{\phi} = \ve{DL^{-1}}\vec{Q} 
+\end{gather*}
+\end{column}
+\begin{column}{0.515\textwidth}
+\center{\textbf{LDO Operator Form}}
+\begin{gather*}
+\ve{L}\vec{\psi} = \ve{J\tilde{S}}\vec{\psi} + \vec{Q}\\
+\left(\ve{I} - \ve{L^{-1} J\tilde{S}}\right)\vec{\psi} = \ve{L^{-1}}\vec{Q} \\ 
+\ve{L^{-1}} = \ve{I}\ve{L^{-1}} \quad \text{and let } \ve{D} \equiv \ve{I} \text{, then} \nonumber\\
+\left(\ve{I} - \ve{D L^{-1} J\tilde{S}}\right)\vec{\psi} = \ve{D L^{-1}}\vec{Q}
+\end{gather*}
+\end{column}
+\end{columns}
+\vspace{0.5em}
+\begin{equation*}
+  \begin{aligned}
+    \ve{L} &= \text{transport operator matrix},\\
+    \ve{M} &= \text{moment-to-discrete matrix},\\
+    \ve{S} &= \text{scattering cross section matrix,}\\
+    \ve{D} &= \text{discrete-to-moment matrix},\\
+    \ve{W} &= \text{quadrature weights matrix},\\
+    \ve{J} &= \text{Lagrange expansion matrix}
+  \end{aligned}
+\end{equation*}
 \end{frame}
 
 \begin{frame}{Dog-Legged Void Neutron (DLVN) Benchmark}
